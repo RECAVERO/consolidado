@@ -1,7 +1,7 @@
 package com.nttdata.application.rest;
 
-import com.nttdata.btask.interfaces.ClientService;
-import com.nttdata.domain.models.ClientDto;
+import com.nttdata.btask.interfaces.AccountService;
+import com.nttdata.domain.models.AccountDto;
 import com.nttdata.domain.models.ResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -12,47 +12,46 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/client")
-public class ClientController {
-  private final ClientService clientService;
+@RequestMapping("/account")
+public class AccountController {
+  private final AccountService accountService;
 
-  public ClientController(ClientService clientService) {
-    this.clientService = clientService;
+  public AccountController(AccountService accountService) {
+    this.accountService = accountService;
   }
 
   @GetMapping
-  public Flux<ClientDto> getListClient(){
-    return this.clientService.getListClient();
+  public Flux<AccountDto> getListClient(){
+    return this.accountService.getListAccount();
   }
   @PostMapping
-  public Mono<ClientDto> saveClient(@RequestBody Mono<ClientDto> clientDto){
-    return clientDto.flatMap(client->{
-      client.setCreatedDate(this.getDateNow());
-      client.setUpdatedDate(this.getDateNow());
-      client.setActive(1);
-      return this.clientService.saveClient(Mono.just(client));
+  public Mono<AccountDto> saveClient(@RequestBody Mono<AccountDto> accountDto){
+    return accountDto.flatMap(account->{
+      account.setCreationDate(this.getDateNow());
+      account.setUpdatedDate(this.getDateNow());
+      account.setActive(1);
+      return this.accountService.saveAccount(Mono.just(account));
     });
   }
 
 
   @PutMapping("/{id}")
-  public Mono<ResponseDto> updateClient(@RequestBody Mono<ClientDto> clientDto, @PathVariable String id){
+  public Mono<ResponseDto> updateClient(@RequestBody Mono<AccountDto> clientDto, @PathVariable String id){
     ResponseDto responseDto=new ResponseDto();
-    return clientDto.flatMap(client->{
-      return this.clientService.getByIdClient(id).flatMap(cli->{
-        if(cli.getId()==null){
+    return clientDto.flatMap(acc->{
+      return this.accountService.getByIdAccount(id).flatMap(account->{
+        if(account.getId()==null){
           responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
           responseDto.setMessage("Client not Exits");
           return Mono.just(responseDto);
         }else{
           responseDto.setStatus(HttpStatus.OK.toString());
           responseDto.setMessage("Client Updated!");
-          cli.setNames(client.getNames());
-          cli.setEmail(client.getEmail());
-          cli.setUpdatedDate(this.getDateNow());
+          account.setTypeAccount(acc.getTypeAccount());
+          account.setUpdatedDate(this.getDateNow());
 
-          return this.clientService.updateClient(Mono.just(cli), id).flatMap(c->{
-            responseDto.setClient(c);
+          return this.accountService.updateAccount(Mono.just(account), id).flatMap(ac->{
+            responseDto.setAccount(ac);
             return Mono.just(responseDto);
           });
         }
@@ -61,25 +60,25 @@ public class ClientController {
   }
 
   @GetMapping("/{id}")
-  public Mono<ClientDto> getClientById(@PathVariable String id){
-    return this.clientService.getByIdClient(id);
+  public Mono<AccountDto> getClientById(@PathVariable String id){
+    return this.accountService.getByIdAccount(id);
   }
 
   @DeleteMapping("/{id}")
   public Mono<ResponseDto> deleteClientById(@PathVariable String id){
     ResponseDto responseDto=new ResponseDto();
 
-    return this.clientService.getByIdClient(id).flatMap(cli->{
+    return this.accountService.getByIdAccount(id).flatMap(cli->{
       if(cli.getId()==null){
         responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
-        responseDto.setMessage("Client not Exits");
+        responseDto.setMessage("Account not Exits");
         return Mono.just(responseDto);
       }else{
 
 
-        return this.clientService.deleteById(id).flatMap(c->{
+        return this.accountService.deleteById(id).flatMap(c->{
           responseDto.setStatus(HttpStatus.OK.toString());
-          responseDto.setMessage("Client Deleted!");
+          responseDto.setMessage("Account Deleted!");
           if(c == null){
             return Mono.just(responseDto);
           }else{

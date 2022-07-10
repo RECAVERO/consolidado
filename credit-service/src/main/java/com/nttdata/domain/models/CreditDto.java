@@ -7,10 +7,16 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TypeDto {
+public class CreditDto {
   private String id;
+  private String idClient;
   private String idType;
-  private String typeClient;
+  private String idProduct;
+  private String numberCuent;
+  private String numberCard;
+  private float balance;
+  private int status;
+  private int category;
   private String updatedDate;
   private String creationDate;
   private int active;

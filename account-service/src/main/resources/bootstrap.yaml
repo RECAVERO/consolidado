@@ -1,0 +1,10 @@
+server:
+  port: 5003
+spring:
+  application:
+    name: account-service
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: accountBank

@@ -11,14 +11,14 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("Types")
-public class Type {
+@Document("Accounts")
+public class Account {
   @Id
   private String id;
   @NotEmpty
-  private String idType;
+  private String idAccount;
   @NotEmpty
-  private String typeClient;
+  private String typeAccount;
   @NotEmpty
   private String updatedDate;
   @NotEmpty

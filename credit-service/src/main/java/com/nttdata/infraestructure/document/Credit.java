@@ -9,16 +9,27 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.NotEmpty;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Document("Types")
-public class Type {
+@NoArgsConstructor
+@Document("Credits")
+public class Credit {
   @Id
   private String id;
   @NotEmpty
+  private String idClient;
+  @NotEmpty
   private String idType;
   @NotEmpty
-  private String typeClient;
+  private String idProduct;
+  @NotEmpty
+  private String numberCuent;
+  private String numberCard;
+  @NotEmpty
+  private float balance;
+  @NotEmpty
+  private int status;
+  @NotEmpty
+  private int category;
   @NotEmpty
   private String updatedDate;
   @NotEmpty
