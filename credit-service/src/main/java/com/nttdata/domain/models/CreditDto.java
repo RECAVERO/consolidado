@@ -11,7 +11,7 @@ public class CreditDto {
   private String id;
   private String idClient;
   private String idType;
-  private String idProduct;
+  private String idAccount;
   private String numberCuent;
   private String numberCard;
   private float balance;

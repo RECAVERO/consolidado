@@ -1,0 +1,10 @@
+server:
+  port: 5005
+spring:
+  application:
+    name: movement-service
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: movementBank

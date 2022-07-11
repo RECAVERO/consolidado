@@ -9,7 +9,6 @@ import org.springframework.data.annotation.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountDto {
-  @Id
   private String id;
   private String idAccount;
   private String typeAccount;

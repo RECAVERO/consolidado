@@ -19,6 +19,8 @@ public class Client {
   @NotEmpty
   private String idClient;
   @NotEmpty
+  private String dni;
+  @NotEmpty
   private String names;
   @NotEmpty
   private String email;

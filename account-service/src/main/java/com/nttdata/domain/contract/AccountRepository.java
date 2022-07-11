@@ -10,4 +10,5 @@ public interface AccountRepository {
   Mono<AccountDto> updateAccount(Mono<AccountDto> accountDto, String id);
   Mono<AccountDto> getByIdAccount(String id);
   Mono<Void> deleteById(String id);
+  Mono<AccountDto> getByIdProduct(String idAccount);
 }

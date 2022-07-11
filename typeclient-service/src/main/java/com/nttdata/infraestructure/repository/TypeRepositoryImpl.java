@@ -46,4 +46,9 @@ public class TypeRepositoryImpl implements TypeRepository {
   public Mono<Void> deleteById(String id) {
     return this.typeRepositoryMongodb.deleteById(id);
   }
+
+  @Override
+  public Mono<TypeDto> findByIdType(String idType) {
+    return this.typeRepositoryMongodb.findByIdType(idType).defaultIfEmpty(new TypeDto());
+  }
 }

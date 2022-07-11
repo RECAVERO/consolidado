@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class ClientDto {
   private String id;
   private String idClient;
+  private String dni;
   private String names;
   private String email;
   private String updatedDate;

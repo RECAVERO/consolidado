@@ -10,4 +10,5 @@ public interface TypeService {
   Mono<TypeDto> updateType(Mono<TypeDto> typeDto, String id);
   Mono<TypeDto> getByIdType(String id);
   Mono<Void> deleteById(String id);
+  Mono<TypeDto> findByIdType(String idType);
 }

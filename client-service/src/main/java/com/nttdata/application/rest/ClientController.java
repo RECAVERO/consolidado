@@ -25,12 +25,27 @@ public class ClientController {
     return this.clientService.getListClient();
   }
   @PostMapping
-  public Mono<ClientDto> saveClient(@RequestBody Mono<ClientDto> clientDto){
+  public Mono<ResponseDto> saveClient(@RequestBody Mono<ClientDto> clientDto){
+    ResponseDto responseDto=new ResponseDto();
     return clientDto.flatMap(client->{
-      client.setCreatedDate(this.getDateNow());
-      client.setUpdatedDate(this.getDateNow());
-      client.setActive(1);
-      return this.clientService.saveClient(Mono.just(client));
+      return this.clientService.findByIdClient(client.getIdClient()).flatMap(c->{
+        if(c.getIdClient() == null){
+          client.setCreatedDate(this.getDateNow());
+          client.setUpdatedDate(this.getDateNow());
+          client.setActive(1);
+          return this.clientService.saveClient(Mono.just(client)).flatMap(x->{
+            responseDto.setStatus(HttpStatus.CREATED.toString());
+            responseDto.setMessage("Client Created");
+            responseDto.setClient(x);
+            return Mono.just(responseDto);
+          });
+        }else{
+          responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
+          responseDto.setMessage("Not Client Created");
+          return Mono.just(responseDto);
+        }
+      });
+
     });
   }
 
@@ -91,12 +106,16 @@ public class ClientController {
 
 
   }
-
-
   private String getDateNow(){
     Date date = new Date();
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     return formatter.format(date).toString();
+  }
+
+
+  @GetMapping("/search/{idClient}")
+  public Mono<ClientDto> getByIdClient(@PathVariable String idClient){
+    return this.clientService.findByIdClient(idClient);
   }
 
 }

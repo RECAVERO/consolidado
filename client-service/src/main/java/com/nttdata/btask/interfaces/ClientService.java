@@ -10,4 +10,5 @@ public interface ClientService {
   Mono<ClientDto> updateClient(Mono<ClientDto> clientDto, String id);
   Mono<ClientDto> getByIdClient(String id);
   Mono<Void> deleteById(String id);
+  Mono<ClientDto> findByIdClient(String idClient);
 }

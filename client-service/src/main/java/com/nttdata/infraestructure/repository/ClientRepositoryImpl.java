@@ -47,4 +47,9 @@ public class ClientRepositoryImpl implements ClientRepository {
   public Mono<Void> deleteById(String id) {
     return this.clientRepositoryMongodb.deleteById(id);
   }
+
+  @Override
+  public Mono<ClientDto> findByIdClient(String idClient) {
+    return this.clientRepositoryMongodb.findByIdClient(idClient).defaultIfEmpty(new ClientDto());
+  }
 }

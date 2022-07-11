@@ -91,11 +91,14 @@ public class AccountController {
 
   }
 
-
   private String getDateNow(){
     Date date = new Date();
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     return formatter.format(date).toString();
   }
 
+  @GetMapping("/search/{idAccount}")
+  public Mono<AccountDto> getByIdAccount(@PathVariable String idAccount){
+    return this.accountService.getByIdProduct(idAccount);
+  }
 }

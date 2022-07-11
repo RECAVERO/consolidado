@@ -48,4 +48,9 @@ public class AccountRepositoryImpl implements AccountRepository {
   public Mono<Void> deleteById(String id) {
     return this.accountRepositoryMongodb.deleteById(id);
   }
+
+  @Override
+  public Mono<AccountDto> getByIdProduct(String idAccount) {
+    return this.accountRepositoryMongodb.findByIdAccount(idAccount);
+  }
 }

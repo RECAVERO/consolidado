@@ -39,4 +39,9 @@ public class TypeServiceImpl implements TypeService {
   public Mono<Void> deleteById(String id) {
     return this.typeRepository.deleteById(id);
   }
+
+  @Override
+  public Mono<TypeDto> findByIdType(String idType) {
+    return this.typeRepository.findByIdType(idType);
+  }
 }

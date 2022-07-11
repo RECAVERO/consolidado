@@ -39,4 +39,9 @@ public class AccountServiceImpl implements AccountService {
   public Mono<Void> deleteById(String id) {
     return this.accountRepository.deleteById(id);
   }
+
+  @Override
+  public Mono<AccountDto> getByIdProduct(String idAccount) {
+    return this.accountRepository.getByIdProduct(idAccount);
+  }
 }

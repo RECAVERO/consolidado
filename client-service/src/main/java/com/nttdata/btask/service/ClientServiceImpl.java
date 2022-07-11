@@ -38,4 +38,9 @@ public class ClientServiceImpl implements ClientService {
   public Mono<Void> deleteById(String id) {
     return this.clientRepository.deleteById(id);
   }
+
+  @Override
+  public Mono<ClientDto> findByIdClient(String idClient) {
+    return this.clientRepository.findByIdClient(idClient);
+  }
 }

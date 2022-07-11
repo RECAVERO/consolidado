@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
-@RequestMapping("type")
+@RequestMapping("/type")
 public class TypeController {
 
   private final TypeService typeService;
@@ -91,10 +91,14 @@ public class TypeController {
 
   }
 
-
   private String getDateNow(){
     Date date = new Date();
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     return formatter.format(date).toString();
+  }
+
+  @GetMapping("/search/{idType}")
+  public Mono<TypeDto> getByIdClient(@PathVariable String idType){
+    return this.typeService.findByIdType(idType);
   }
 }
