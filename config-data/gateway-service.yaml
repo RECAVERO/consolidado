@@ -1,0 +1,35 @@
+server:
+  port: 8080
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+spring:
+  cloud:
+    gateway:
+        discovery:
+          locator:
+            enabled: true
+        routes:
+          - id: client-service
+            uri: lb://client-service
+            predicates:
+              - Path=/client/**
+          - id: type-service
+            uri: lb://type-service
+            predicates:
+              - Path=/type/**
+          - id: account-service
+            uri: lb://account-service
+            predicates:
+              - Path=/account/**
+          - id: credit-service
+            uri: lb://credit-service
+            predicates:
+              - Path=/credit/**
+          - id: movement-service
+            uri: lb://movement-service
+            predicates:
+              - Path=/movement/**
