@@ -2,7 +2,9 @@ package com.nttdata.application.rest;
 
 import com.nttdata.btask.interfaces.CreditService;
 import com.nttdata.domain.models.*;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -227,6 +229,11 @@ public class CreditController {
 
   }
 
+  private ResponseEntity<Mono<String>> fallBackPostCreditDeposit(@RequestBody Mono<CreditDto> creditDto,
+                                                          RuntimeException e) {
+    return new ResponseEntity(Mono.just("Servicio esta en mantenimiento"), HttpStatus.OK);
+  }
+  @CircuitBreaker(name = "DepositCB", fallbackMethod = "fallBackPostCreditDeposit")
   @PostMapping("/deposit")
   public Mono<CreditDto> updateCreditDeposit(@RequestBody Mono<CreditDto> creditDto){
     return creditDto.flatMap(credit->{
