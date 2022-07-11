@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 7070
 eureka:
   client:
     fetch-registry: true
@@ -7,7 +7,6 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
   instance:
-    prefer-ip-address: true
     hostname: localhost
 spring:
   cloud:
