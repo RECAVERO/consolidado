@@ -1,14 +1,2 @@
 server:
   port: 5001
-spring:
-  application:
-    name: client-service
-  cloud:
-    config:
-      enabled: true
-      uri: http://localhost:8081
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      database: clientBank
