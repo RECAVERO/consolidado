@@ -1,6 +1,8 @@
 server:
   port: 5001
 spring:
+  application:
+    name: client-service
   data:
     mongodb:
       host: localhost
