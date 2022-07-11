@@ -1,12 +1,6 @@
 server:
   port: 5005
 spring:
-  application:
-    name: movement-service
-  cloud:
-    config:
-      enabled: true
-      uri: http://localhost:8081
   data:
     mongodb:
       host: localhost

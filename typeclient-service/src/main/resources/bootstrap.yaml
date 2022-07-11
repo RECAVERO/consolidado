@@ -1,10 +1,7 @@
-server:
-  port: 5002
 spring:
   application:
     name: type-service
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      database: typeBank
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8081

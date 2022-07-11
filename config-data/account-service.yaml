@@ -1,12 +1,6 @@
 server:
   port: 5003
 spring:
-  application:
-    name: account-service
-  cloud:
-    config:
-      enabled: true
-      uri: http://localhost:8081
   data:
     mongodb:
       host: localhost
