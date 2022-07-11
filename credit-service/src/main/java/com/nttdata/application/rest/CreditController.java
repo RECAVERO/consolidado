@@ -126,11 +126,18 @@ public class CreditController {
       return Mono.just(responseDto);
     });
   }
-
+  //@CircuitBreaker(name = "DepositCB", fallbackMethod = "fallBackPostCreditDeposit")
   @PostMapping("/prueba")
   public Mono<AccountDto> prueba(@RequestBody Mono<AccountDto> clientDtoMono){
     return clientDtoMono.flatMap(client->{
       return this.creditService.getByIdAccount(client.getIdAccount());
+    });
+  }
+
+  public Mono<AccountDto> fallBackPostCreditDeposit(@RequestBody Mono<AccountDto> clientDtoMono,
+                                                                 RuntimeException e) {
+    return clientDtoMono.flatMap(c->{
+      return Mono.just(c);
     });
   }
 
@@ -229,11 +236,8 @@ public class CreditController {
 
   }
 
-  private ResponseEntity<Mono<String>> fallBackPostCreditDeposit(@RequestBody Mono<CreditDto> creditDto,
-                                                          RuntimeException e) {
-    return new ResponseEntity(Mono.just("Servicio esta en mantenimiento"), HttpStatus.OK);
-  }
-  @CircuitBreaker(name = "DepositCB", fallbackMethod = "fallBackPostCreditDeposit")
+
+
   @PostMapping("/deposit")
   public Mono<CreditDto> updateCreditDeposit(@RequestBody Mono<CreditDto> creditDto){
     return creditDto.flatMap(credit->{
