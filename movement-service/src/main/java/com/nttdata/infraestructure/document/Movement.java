@@ -33,6 +33,7 @@ public class Movement {
     private String numberCard;
     @NotEmpty
     private int category;
+    private int idMovementNumberCard;
     @NotEmpty
     private String updatedDate;
     @NotEmpty

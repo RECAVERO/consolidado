@@ -63,5 +63,26 @@ public class CreditRepositoryImpl implements CreditRepository {
     return this.creditRepositoryMongodb.findByNumberCuent(numberCuent).defaultIfEmpty(new CreditDto());
   }
 
+  @Override
+  public Flux<CreditDto> getCreditByIdClient(String idClient) {
+    return this.creditRepositoryMongodb.findByIdClient(idClient);
+  }
+
+  @Override
+  public Flux<CreditDto> getCreditByIdClientAndIdTypeAndIdProductAndCreationDateBetween(String idClient, String idType, String idAccount, String dateStart, String dateEnd) {
+    return this.creditRepositoryMongodb.findByIdClientAndIdTypeAndIdAccountAndCreationDateBetween(idClient, idType, idAccount, dateStart, dateEnd);
+  }
+
+  @Override
+  public Flux<CreditDto> getCreditByNumberCard(String NumberCard) {
+    return this.creditRepositoryMongodb.findByNumberCard(NumberCard).defaultIfEmpty(new CreditDto());
+  }
+
+  @Override
+  public Mono<CreditDto> getCreditByNumberCardAndCategory(String numberCard, int category) {
+    return this.creditRepositoryMongodb.findByNumberCardAndCategory(numberCard, category);
+  }
+
+
 
 }

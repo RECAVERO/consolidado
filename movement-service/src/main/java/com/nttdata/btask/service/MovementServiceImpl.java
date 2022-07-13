@@ -110,5 +110,29 @@ public class MovementServiceImpl implements MovementService {
                 .bodyToMono(AccountDto.class);
     }
 
+    @Override
+    public Flux<MovementDto> getListMovementByIdClientAndIdTypeAndIdProductAndCreationDateBetween(String idClient, String idType, String idProduct, String dateStart, String dateEnd) {
+        return this.movementRepository.getListMovementByIdClientAndIdTypeAndIdProductAndCreationDateBetween(idClient, idType, idProduct, dateStart, dateEnd);
+    }
+
+    @Override
+    public Flux<CreditDto> getListCreditByIdClientAndIdTypeAndIdAccountAndCreationDateBetween(String idClient, String idType, String idAccount, String dateStart, String dateEnd) {
+        return webClientBuilder.build()
+            .get().uri("http://localhost:5004/credit/products/"+ idClient +"/"+idType +"/"+idAccount +"/"+ dateStart +"/"+ dateEnd)
+            .retrieve()
+            .bodyToFlux(CreditDto.class);
+    }
+    @Override
+    public Mono<CreditDto> getCreditByIdNumberCard(String numberCuent) {
+        return webClientBuilder.build()
+            .get().uri("http://localhost:5004/credit/search/card/"+ numberCuent)
+            .retrieve()
+            .bodyToMono(CreditDto.class);
+    }
+
+    @Override
+    public Flux<MovementDto> getListMovementByIdNumberCard(String numberCard) {
+        return this.movementRepository.getListMovementByIdNumberCard(numberCard);
+    }
 
 }

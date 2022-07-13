@@ -104,5 +104,24 @@ public class CreditServiceImpl implements CreditService {
 
   }
 
+  @Override
+  public Flux<CreditDto> getCreditByIdClient(String idClient) {
+    return this.creditRepository.getCreditByIdClient(idClient);
+  }
+
+  @Override
+  public Flux<CreditDto> getCreditByIdClientAndIdTypeAndIdProductAndCreationDateBetween(String idClient, String idType, String idAccount, String dateStart, String dateEnd) {
+    return this.creditRepository.getCreditByIdClientAndIdTypeAndIdProductAndCreationDateBetween(idClient, idType, idAccount, dateStart, dateEnd);
+  }
+
+  @Override
+  public Flux<CreditDto> getCreditByNumberCard(String NumberCard) {
+    return this.creditRepository.getCreditByNumberCard(NumberCard);
+  }
+
+  @Override
+  public Mono<CreditDto> getCreditByNumberCardAndCategory(String numberCard, int category) {
+    return this.creditRepository.getCreditByNumberCardAndCategory(numberCard, category);
+  }
 
 }

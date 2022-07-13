@@ -12,4 +12,12 @@ public interface MovementRepository {
     Mono<Void> deleteById(String id);
 
     Flux<MovementDto> getListMovementByIdClientAndNumberCuent(String idClient, String numberCuent);
+
+    Flux<MovementDto> getListMovementByIdClientAndIdTypeAndIdProductAndCreationDateBetween(String idClient,
+                                                                                           String idType,
+                                                                                           String idProduct,
+                                                                                           String dateStart,
+                                                                                           String dateEnd);
+
+    Flux<MovementDto> getListMovementByIdNumberCard(String numberCard);
 }

@@ -20,4 +20,19 @@ public interface MovementService {
     Mono<ClientDto> getByIdClient(String idClient);
     Mono<TypeDto> getByIdType(String idType);
     Mono<AccountDto> getByIdAccount(String idAccount);
+
+    Flux<MovementDto> getListMovementByIdClientAndIdTypeAndIdProductAndCreationDateBetween(String idClient,
+                                                                                           String idType,
+                                                                                           String idAccount,
+                                                                                           String dateStart,
+                                                                                           String dateEnd);
+    Flux<CreditDto> getListCreditByIdClientAndIdTypeAndIdAccountAndCreationDateBetween(String idClient,
+                                                                                       String idType,
+                                                                                       String idAccount,
+                                                                                       String dateStart,
+                                                                                       String dateEnd);
+
+    Mono<CreditDto> getCreditByIdNumberCard(String numberCard);
+
+    Flux<MovementDto> getListMovementByIdNumberCard(String numberCard);
 }

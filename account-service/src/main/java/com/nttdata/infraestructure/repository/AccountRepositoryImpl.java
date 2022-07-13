@@ -51,6 +51,6 @@ public class AccountRepositoryImpl implements AccountRepository {
 
   @Override
   public Mono<AccountDto> getByIdProduct(String idAccount) {
-    return this.accountRepositoryMongodb.findByIdAccount(idAccount);
+    return this.accountRepositoryMongodb.findByIdAccount(idAccount).defaultIfEmpty(new AccountDto());
   }
 }

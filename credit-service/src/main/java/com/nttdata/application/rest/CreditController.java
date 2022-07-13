@@ -10,7 +10,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -115,6 +117,7 @@ public class CreditController {
     credit.setBalance(0);
     credit.setCategory(0);
     credit.setStatus(0);
+    credit.setIdMovementNumberCard(0);
     credit.setNumberCuent(UUID.randomUUID().toString());
     credit.setCreationDate(this.getDateNow());
     credit.setUpdatedDate(this.getDateNow());
@@ -253,11 +256,214 @@ public class CreditController {
   public Mono<CreditDto> updateCreditWithdrawal(@RequestBody Mono<CreditDto> creditDto){
     return creditDto.flatMap(credit->{
       return this.creditService.getByIdCredit(credit.getId()).flatMap(c->{
+        System.out.println(credit);
         c.setUpdatedDate(this.getDateNow());
+        c.setIdMovementNumberCard(c.getIdMovementNumberCard() + credit.getIdMovementNumberCard());
         c.setBalance(c.getBalance() - credit.getBalance());
         return this.creditService.updateCredit(Mono.just(c), c.getId());
       });
     });
   }
 
+  /*--------------------------------endpoint de pro03-----------------------*/
+  @GetMapping("/products/{idClient}")
+  public Flux<CreditDto> getListCreditByIdClient(@PathVariable String idClient){
+
+    return this.creditService.getCreditByIdClient(idClient);
+
+  }
+
+  @PostMapping("/withoutDebt")
+  public Mono<ResponseDto> saveCreditWithoutDebt(@RequestBody Mono<CreditDto> creditDto) {
+    ResponseDto responseDto=new ResponseDto();
+
+
+    return creditDto.flatMap(credit->{
+      return this.creditService.getByIdClient(credit.getIdClient()).flatMap(client->{
+        if(client.getId() == null){
+          responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
+          responseDto.setMessage("Not exits client");
+          return Mono.just(responseDto);
+        }else{
+
+          return this.creditService.getByIdType(credit.getIdType()).flatMap(type->{
+            if(type.getId() == null){
+              responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
+              responseDto.setMessage("Not exits type client");
+              return Mono.just(responseDto);
+            }else{
+              System.out.println("existe " + type);
+              return this.creditService.getByIdAccount(credit.getIdAccount()).flatMap(account->{
+                if(account.getId() == null){
+                  responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
+                  responseDto.setMessage("Not exits Account");
+                  return Mono.just(responseDto);
+                }else{
+                  System.out.println("existe reynaldo" + type.getTypeClient());
+                  if(type.getIdType().equals("typ01")){
+                    return this.creditService.getByIdClientAndIdTypeAndIdAccount(credit.getIdClient(), credit.getIdType(), credit.getIdAccount()).flatMap(c->{
+                      if(c.getId() == null){
+                        responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
+                        responseDto.setMessage("Not exits Product");
+                        return Mono.just(responseDto);
+                      }else{
+                        if(c.getStatus() == 3){
+                          responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
+                          responseDto.setMessage("you cannot create an account; because you have debt");
+                          return Mono.just(responseDto);
+                        }else{
+                          return this.saveCreditAccount(credit, responseDto);
+                        }
+
+                      }
+                    });
+                  }else if(type.getIdType().equals("typ02")){
+                    System.out.println("Entro aca " + type.getTypeClient());
+                    return this.creditService.getByIdClientAndIdTypeAndIdAccount(credit.getIdClient(), credit.getIdType(), credit.getIdAccount()).flatMap(acount->{
+                      System.out.println(acount.getStatus());
+                      if(acount.getId() == null){
+                        return this.saveCreditAccount(credit,responseDto);
+                      }else{
+                        if(acount.getStatus() == 3){
+                          responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
+                          responseDto.setMessage("you cannot create an account; because you have debt");
+                          return Mono.just(responseDto);
+                        }else{
+                          responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
+                          responseDto.setMessage("multiple");
+                          return Mono.just(responseDto);
+                          //return this.saveCreditAccount(credit,responseDto);
+                        }
+                      }
+
+                    });
+
+                  }else{
+                    responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
+                    responseDto.setMessage("Not exits Type Client");
+                    return Mono.just(responseDto);
+                  }
+
+
+
+                }
+
+
+              });
+            }
+          });
+        }
+
+      });
+    });
+  }
+
+  @GetMapping("/products/{idClient}/{idType}/{idAccount}/{dateStart}/{dateEnd}")
+  public Flux<CreditDto> getListProductRangeDate(@PathVariable String idClient,
+                                                 @PathVariable String idType,
+                                                 @PathVariable String idAccount,
+                                                 @PathVariable String dateStart,
+                                                 @PathVariable String dateEnd){
+
+
+    return this.creditService.getCreditByIdClientAndIdTypeAndIdProductAndCreationDateBetween(idClient, idType, idAccount, dateStart, dateEnd);
+  }
+
+  @PostMapping("/associate/account")
+  public Flux<ResponseListDto> associateAccount(@RequestBody  Flux<CreditDto> requestDtoMono){
+    ResponseListDto responseDto=new ResponseListDto();
+    String codigo=UUID.randomUUID().toString();
+
+    return requestDtoMono.flatMap(credit->{
+      System.out.println(credit);
+      return this.creditService.getByIdClientAndIdTypeAndIdAccountAndNumberCuent(credit.getIdClient(),credit.getIdType(),credit.getIdAccount(),credit.getNumberCuent()).flatMap(g->{
+        System.out.println(g);
+        if(g.getIdClient() == null){
+          responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
+          responseDto.setMsg("No existe el producto : " + credit.getNumberCuent());
+          return Mono.just(responseDto);
+        }else{
+          CreditDto creditDto=new CreditDto();
+          creditDto.setId(g.getId());
+          creditDto.setIdClient(g.getIdClient());
+          creditDto.setIdType(g.getIdType());
+          creditDto.setIdAccount(g.getIdAccount());
+          creditDto.setNumberCuent(g.getNumberCuent());
+          creditDto.setNumberCard(codigo);
+          creditDto.setBalance(g.getBalance());
+          creditDto.setStatus(g.getStatus());
+          creditDto.setCategory(credit.getCategory());
+          creditDto.setUpdatedDate(g.getUpdatedDate());
+          creditDto.setCreationDate(g.getCreationDate());
+          creditDto.setActive(g.getActive());
+
+
+          return this.updateCardDebit(Mono.just(creditDto),g.getId());
+
+        }
+      });
+
+    });
+  }
+
+
+  @PostMapping("/associate/prueba/{numberCard}")
+  public Flux<CreditDto> associateAccountww(@PathVariable  String numberCard){
+
+
+      return this.creditService.getCreditByNumberCard(numberCard);
+
+
+  }
+
+  private Mono<ResponseListDto> updateCardDebit(Mono<CreditDto> creditDto, String id){
+    ResponseListDto responseDto=new ResponseListDto();
+    List<CreditDto> lista=new ArrayList<>();
+
+
+    return this.creditService.updateCredit(creditDto, id).flatMap(update->{
+      responseDto.setStatus(HttpStatus.CREATED.toString());
+      if(update.getCategory() == 1){
+        responseDto.setMsg("Se asocio tarjeta de debito a cuenta principal : " + update.getNumberCuent());
+      }else{
+        responseDto.setMsg("Se asocio tarjeta de debito a cuenta : " + update.getNumberCuent());
+      }
+
+      lista.add(update);
+      responseDto.setListCreditDto(lista);
+
+      return Mono.just(responseDto);
+    });
+
+  }
+
+  @GetMapping("/search/{numberCard}")
+  public Flux<CreditDto> getCreditByIdNumberCard(@PathVariable String numberCard){
+    return this.creditService.getCreditByNumberCard(numberCard);
+  }
+  @GetMapping("/search/card/{numberCuent}")
+  public Mono<CreditDto> getCreditByIdNumberCuent(@PathVariable String numberCuent){
+    return this.creditService.getCreditByNumberCuent(numberCuent);
+  }
+
+
+  @GetMapping("/search/balance/mainAccount")
+  public Mono<ResponseDto> getBalanceMainAccount(@RequestBody Mono<CreditDto> creditDto){
+    ResponseDto responseDto=new ResponseDto();
+    return creditDto.flatMap(credit->{
+      if(credit.getNumberCard() == null || credit.getNumberCard()==""){
+        responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
+        responseDto.setMessage("Number card Empty");
+        return Mono.just(responseDto);
+      }else{
+        return this.creditService.getCreditByNumberCardAndCategory(credit.getNumberCard(),credit.getCategory()).flatMap(b->{
+          responseDto.setStatus(HttpStatus.OK.toString());
+          responseDto.setMessage("card principal");
+          responseDto.setCredit(b);
+          return Mono.just(responseDto);
+        });
+      }
+
+    });
+  }
 }

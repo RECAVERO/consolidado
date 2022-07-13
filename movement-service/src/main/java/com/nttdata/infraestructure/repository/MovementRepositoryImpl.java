@@ -51,4 +51,14 @@ public class MovementRepositoryImpl implements MovementRepository {
     public Flux<MovementDto> getListMovementByIdClientAndNumberCuent(String idClient, String numberCuent) {
         return this.movementRepositoryMongodb.findByIdClientAndNumberCuent(idClient, numberCuent);
     }
+
+    @Override
+    public Flux<MovementDto> getListMovementByIdClientAndIdTypeAndIdProductAndCreationDateBetween(String idClient, String idType, String idProduct, String dateStart, String dateEnd) {
+        return this.movementRepositoryMongodb.findByIdClientAndIdTypeAndIdAccountAndCreationDateBetween(idClient, idType, idProduct, dateStart, dateEnd).defaultIfEmpty(new MovementDto());
+    }
+
+    @Override
+    public Flux<MovementDto> getListMovementByIdNumberCard(String numberCard) {
+        return this.movementRepositoryMongodb.findByNumberCard(numberCard);
+    }
 }

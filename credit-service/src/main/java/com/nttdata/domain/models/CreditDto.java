@@ -17,6 +17,7 @@ public class CreditDto {
   private float balance;
   private int status;
   private int category;
+  private int idMovementNumberCard;
   private String updatedDate;
   private String creationDate;
   private int active;
