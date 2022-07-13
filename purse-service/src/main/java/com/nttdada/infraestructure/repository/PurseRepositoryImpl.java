@@ -52,4 +52,14 @@ public class PurseRepositoryImpl implements PurseRepository {
   public Mono<PurseDto> findByNumberIdentity(String numberIdentity) {
     return this.purseRepositoryMongodb.findByNumberIdentity(numberIdentity).defaultIfEmpty(new PurseDto());
   }
+
+  @Override
+  public Mono<PurseDto> findByNumberCell(String numberCell) {
+    return this.purseRepositoryMongodb.findByNumberCell(numberCell).defaultIfEmpty(new PurseDto());
+  }
+
+  @Override
+  public Mono<PurseDto> findByEmail(String email) {
+    return this.purseRepositoryMongodb.findByEmail(email).defaultIfEmpty(new PurseDto());
+  }
 }

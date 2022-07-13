@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/purse")
@@ -28,22 +29,53 @@ public class PurseController {
   public Mono<ResponseDto> savePurse(@RequestBody Mono<PurseDto> purseDto){
     ResponseDto responseDto=new ResponseDto();
     return purseDto.flatMap(purse->{
-      return this.purseService.findByNumberIdentity(purse.getNumberPurse()).flatMap(c->{
+      return this.purseService.findByNumberIdentity(purse.getNumberIdentity()).flatMap(c->{
+        System.out.println(c);
         if(c.getNumberIdentity() == null){
-          purse.setCreationDate(this.getDateNow());
-          purse.setUpdatedDate(this.getDateNow());
-          purse.setActive(1);
-          return this.purseService.savePurse(Mono.just(purse)).flatMap(x->{
-            responseDto.setStatus(HttpStatus.CREATED.toString());
-            responseDto.setMessage("Purse Created");
-            responseDto.setPurse(x);
-            return Mono.just(responseDto);
+
+          return this.purseService.findByNumberCell(purse.getNumberCell()).flatMap(ce->{
+            if(ce.getId() == null){
+              return this.purseService.findByEmail(purse.getEmail()).flatMap(en->{
+                System.out.println(en);
+                if(en.getId() == null){
+                  purse.setNumberPurse(UUID.randomUUID().toString());
+                  purse.setBalance(0);
+                  purse.setCreationDate(this.getDateNow());
+                  purse.setUpdatedDate(this.getDateNow());
+                  purse.setActive(1);
+                  return this.purseService.savePurse(Mono.just(purse)).flatMap(x->{
+                    responseDto.setStatus(HttpStatus.CREATED.toString());
+                    responseDto.setMessage("Purse Created");
+                    responseDto.setPurse(x);
+                    return Mono.just(responseDto);
+                  });
+                }else{
+                  responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
+                  responseDto.setMessage("email Used");
+                  return Mono.just(responseDto);
+                }
+              });
+            }else{
+              responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
+              responseDto.setMessage("Cell used");
+              return Mono.just(responseDto);
+
+
+            }
           });
+
+
+
         }else{
           responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
-          responseDto.setMessage("Not Purse Created");
+          responseDto.setMessage("Number Identity Used");
           return Mono.just(responseDto);
+
         }
+
+
+
+
       });
 
     });

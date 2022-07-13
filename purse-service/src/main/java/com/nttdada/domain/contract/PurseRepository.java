@@ -12,4 +12,7 @@ public interface PurseRepository {
   Mono<Void> deleteById(String id);
 
   Mono<PurseDto> findByNumberIdentity(String numberIdentity);
+
+  Mono<PurseDto> findByNumberCell(String numberCell);
+  Mono<PurseDto> findByEmail(String email);
 }

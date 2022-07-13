@@ -43,4 +43,14 @@ public class PurseServiceImpl implements PurseService {
   public Mono<PurseDto> findByNumberIdentity(String numberIdentity) {
     return this.purseRepository.findByNumberIdentity(numberIdentity);
   }
+
+  @Override
+  public Mono<PurseDto> findByNumberCell(String numberCell) {
+    return this.purseRepository.findByNumberCell(numberCell);
+  }
+
+  @Override
+  public Mono<PurseDto> findByEmail(String email) {
+    return this.purseRepository.findByEmail(email);
+  }
 }

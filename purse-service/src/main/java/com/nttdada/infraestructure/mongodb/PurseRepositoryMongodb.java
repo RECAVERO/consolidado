@@ -11,4 +11,6 @@ public interface PurseRepositoryMongodb extends ReactiveMongoRepository<Purse, S
   //Mono<PurseDto> findByIdPurse(String idPurse);
 
   Mono<PurseDto> findByNumberIdentity(String numberIdentity);
+  Mono<PurseDto> findByNumberCell(String numberCell);
+  Mono<PurseDto> findByEmail(String email);
 }
