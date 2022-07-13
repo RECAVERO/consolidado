@@ -35,3 +35,23 @@ spring:
             uri: lb://movement-service
             predicates:
               - Path=/movement/**
+          - id: purchase-service
+            uri: lb://purchase-service
+            predicates:
+              - Path=/purchase/**
+          - id: product-service
+            uri: lb://product-service
+            predicates:
+              - Path=/product/**
+          - id: paymenttype-service
+            uri: lb://paymenttype-service
+            predicates:
+              - Path=/paymenttype/**
+          - id: purse-service
+            uri: lb://purse-service
+            predicates:
+              - Path=/purse/**
+          - id: currency-service
+            uri: lb://currency-service
+            predicates:
+              - Path=/currency/**

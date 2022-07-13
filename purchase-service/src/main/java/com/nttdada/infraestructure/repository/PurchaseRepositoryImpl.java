@@ -4,9 +4,10 @@ import com.nttdada.domain.contract.PurchaseRepository;
 import com.nttdada.domain.models.PurchaseDto;
 import com.nttdada.infraestructure.mongodb.PurchaseRepositoryMongodb;
 import com.nttdada.utils.convert.Convert;
+import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
+@Repository
 public class PurchaseRepositoryImpl implements PurchaseRepository {
   private final PurchaseRepositoryMongodb purchaseRepositoryMongodb;
 

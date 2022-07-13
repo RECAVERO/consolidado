@@ -5,7 +5,7 @@ spring:
     config:
       server:
         git:
-          default-label: paymenttype
+          default-label: purchase
           uri: https://github.com/RECAVERO/consolidado/
           search-paths: config-data
   application:
