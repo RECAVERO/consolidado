@@ -62,7 +62,8 @@ public class CurrencyController {
         }else{
           responseDto.setStatus(HttpStatus.OK.toString());
           responseDto.setMessage("Client Updated!");
-          curre.setPriceSoles(currency.getPriceSoles());
+          curre.setPriceSale(currency.getPriceSale());
+          curre.setPricePurchase(currency.getPricePurchase());
           curre.setUpdatedDate(this.getDateNow());
           return this.currencyService.updateCurrency(Mono.just(curre), id).flatMap(c->{
             responseDto.setCurrency(c);
@@ -107,9 +108,36 @@ public class CurrencyController {
   }
 
 
-  @GetMapping("/search/{idClient}")
-  public Mono<CurrencyDto> getByIdClient(@PathVariable String idClient){
-    return this.currencyService.findByIdCurrency(idClient);
+  @GetMapping("/search/{idCurrency}")
+  public Mono<CurrencyDto> getByIdClient(@PathVariable String idCurrency){
+    return this.currencyService.findByIdCurrency(idCurrency);
+  }
+  @PostMapping("/convert")
+  public Mono<ResponseDto> covertCurrency(@RequestBody Mono<CurrencyDto> currencyDto){
+    ResponseDto responseDto=new ResponseDto();
+    return currencyDto.flatMap(currency->{
+      return this.currencyService.findByIdCurrency(currency.getIdCurrency()).flatMap(c->{
+        if(c.getId() == null){
+          responseDto.setStatus(HttpStatus.NOT_FOUND.toString());
+          responseDto.setMessage("No exits type Money");
+          return Mono.just(responseDto);
+        }else{
+          if(c.getIdCurrency().equals("cur02")){
+            c.setPriceSale(currency.getAmount() * c.getPriceSale());
+            c.setPricePurchase(c.getPricePurchase());
+          }else{
+            c.setPriceSale(c.getPriceSale());
+            c.setPricePurchase(currency.getAmount() * c.getPriceSale());
+          }
+          responseDto.setStatus(HttpStatus.CREATED.toString());
+          responseDto.setMessage("OK");
+          responseDto.setCurrency(c);
+          return Mono.just(responseDto);
+        }
+
+      });
+
+    });
   }
 
 }

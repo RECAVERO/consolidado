@@ -1,0 +1,15 @@
+package com.nttdada.domain.contract;
+
+import com.nttdada.domain.models.PurseDto;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+public interface PurseRepository {
+  Flux<PurseDto> getListPurse();
+  Mono<PurseDto> savePurse(Mono<PurseDto> purseDto);
+  Mono<PurseDto> updatePurse(Mono<PurseDto> purseDto, String id);
+  Mono<PurseDto> getByIdPurse(String id);
+  Mono<Void> deleteById(String id);
+
+  Mono<PurseDto> findByNumberIdentity(String numberIdentity);
+}

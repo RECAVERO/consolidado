@@ -4,17 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CurrencyDto {
+public class PurseDto {
   private String id;
-  private String idCurrency;
-  private String typeCurrency;
-  private float  priceSale;
-  private float  pricePurchase;
-  private float  amount;
+  private String numberIdentity;
+  private String numberCell;
+  private String email;
+  private String numberPurse;
+  private float balance;
   private String updatedDate;
-  private String createdDate;
+  private String creationDate;
   private int active;
 }

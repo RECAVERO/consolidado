@@ -11,22 +11,24 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document("coins")
-public class Currency {
+@Document("Purses")
+public class Purse {
   @Id
   private String id;
   @NotEmpty
-  private String idCurrency;
+  private String numberIdentity;
   @NotEmpty
-  private String typeCurrency;
+  private String numberCell;
   @NotEmpty
-  private float  priceSale;
+  private String email;
   @NotEmpty
-  private float  pricePurchase;
+  private String numberPurse;
+  @NotEmpty
+  private float balance;
   @NotEmpty
   private String updatedDate;
   @NotEmpty
-  private String createdDate;
+  private String creationDate;
   @NotEmpty
   private int active;
 }
