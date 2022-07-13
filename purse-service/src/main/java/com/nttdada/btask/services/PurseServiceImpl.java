@@ -3,9 +3,10 @@ package com.nttdada.btask.services;
 import com.nttdada.btask.interfaces.PurseService;
 import com.nttdada.domain.contract.PurseRepository;
 import com.nttdada.domain.models.PurseDto;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
+@Service
 public class PurseServiceImpl implements PurseService {
   private final PurseRepository purseRepository;
 
